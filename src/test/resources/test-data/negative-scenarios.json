@@ -1,0 +1,59 @@
+{
+  "rechazo-tarjeta": {
+    "cardProfile": "diners-declined",
+    "expectedCardStatus": "declined",
+    "expectedStage": "authorization",
+    "expectedResult": "functional-rejection"
+  },
+  "cvv-invalido": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "cvvOverride": "999",
+    "expectedStage": "authorization",
+    "expectedResult": "functional-rejection"
+  },
+  "otp-invalido": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "otpOverride": "999999",
+    "expectedStage": "otp-validation",
+    "expectedResult": "flow-must-stop"
+  },
+  "tarjeta-vencida": {
+    "cardProfile": "diners-expired",
+    "expectedCardStatus": "expired",
+    "expectedExpirationDate": "2511",
+    "expectedStage": "authorization",
+    "expectedResult": "functional-rejection"
+  },
+  "monto-invalido": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "transactionAmount": "ABC",
+    "installments": "1",
+    "expectedHttpStatus": 400,
+    "expectedStage": "interest-calculation",
+    "expectedResult": "business-error",
+    "expectedBusinessCode": "0020"
+  },
+  "cuotas-invalidas": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "transactionAmount": "500",
+    "installments": "0",
+    "expectedHttpStatus": 400,
+    "expectedStage": "interest-calculation",
+    "expectedResult": "business-error"
+  },
+  "comercio-no-autorizado": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "merchant": {
+      "merchantCode": "1545070",
+      "actividadComercial": "001",
+      "nombreEstablecimiento": "+ sport"
+    },
+    "expectedStage": "authorization",
+    "expectedResult": "functional-rejection"
+  }
+}

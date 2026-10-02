@@ -1,0 +1,19 @@
+target/
+.idea/
+.vscode/settings.json
+
+# Local environment and sensitive test data
+.env
+*.pem
+*.key
+*.p12
+*.jks
+secrets/
+test-data/local/
+
+# Generated execution/output artifacts
+execution_*.txt
+execution_output*.txt
+flujo_*.txt
+*_out.txt
+*.log

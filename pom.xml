@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.dinersclub.integracion</groupId>
+    <artifactId>automatizacion-karate</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Automatizacion de integracion Place To Pay</name>
+    <description>Pruebas de integracion para los servicios Place To Pay</description>
+
+    <properties>
+        <!-- Versiones de Java, Karate, JUnit y Maven usadas por el proyecto. -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>21</maven.compiler.release>
+        <karate.version>1.4.1</karate.version>
+        <junit.jupiter.version>5.11.4</junit.jupiter.version>
+        <maven.surefire.version>3.5.2</maven.surefire.version>
+    </properties>
+
+    <dependencies>
+        <!-- Herramientas necesarias para ejecutar las pruebas; no forman parte de una aplicacion final. -->
+        <dependency>
+            <groupId>com.intuit.karate</groupId>
+            <artifactId>karate-junit5</artifactId>
+            <version>${karate.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <testResources>
+            <!-- Archivos de pruebas y scripts que Karate necesita para funcionar. -->
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <!-- Copia las listas de tarjetas y comercios al lugar donde las busca la configuracion. -->
+            <testResource>
+                <directory>test-data</directory>
+                <includes>
+                    <include>local/merchants.json</include>
+                    <include>local/cards.json</include>
+                </includes>
+                <targetPath>test-data</targetPath>
+            </testResource>
+        </testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
