@@ -11,16 +11,25 @@ Feature: Consultar tipos de credito
 
   @credito @encrypted
   Scenario: Consultar formas de pago para la tarjeta dummy
+    * def expectedHttpStatus = karate.get('expectedHttpStatus') || 200
+    * def omitMerchantCode = karate.get('omitMerchantCode') || false
+    * def omitEncryptedCard = karate.get('omitEncryptedCard') || false
+    * def maskedCardOverride = karate.get('maskedCardOverride')
+    * def merchantCodeOverride = karate.get('merchantCodeOverride')
     * def fields = crypto.encryptFields({ tarjeta: cardNumber })
     * def sessionId = base.uuid()
     * def dinHeader = base.header(sessionId)
     * def values = fields.values
-    * def dinBody = { codigoComercio: '#(merchantCode)', tarjetaEncriptada: '#(values.tarjeta)', tarjetaEnmascarada: '#(maskedCard)' }
+    * def requestMerchantCode = merchantCodeOverride || merchantCode
+    * def requestMaskedCard = maskedCardOverride || maskedCard
+    * def dinBody = { codigoComercio: '#(requestMerchantCode)', tarjetaEncriptada: '#(values.tarjeta)', tarjetaEnmascarada: '#(requestMaskedCard)' }
+    * eval if (omitMerchantCode) delete dinBody.codigoComercio
+    * eval if (omitEncryptedCard) delete dinBody.tarjetaEncriptada
     * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
     * set dinHeader.llaveSimetrica = encrypted.fieldSecretKey
     * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
     Given request requestPayload
     When method post
-    Then status 200
+    * match responseStatus == expectedHttpStatus
     And match response.body == '#string'
     And match response.secretKey == '#string'

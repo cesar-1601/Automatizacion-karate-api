@@ -113,6 +113,25 @@ Feature: Escenarios negativos end-to-end
     * def calculationArgs = { publicKeyBase64: '#(publicKeyBase64)', transactionAmount: '#(scenarioData.transactionAmount)', installments: '#(scenarioData.installments)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
     * call read('classpath:features/calcular-interes.feature') calculationArgs
 
+  @negativo @e2e @monto-supera-longitud
+  Scenario: Error de negocio por monto superior a la longitud permitida
+    * def scenarioData = negativeScenarios['monto-supera-longitud']
+    * def cardData = call read('classpath:features/resolver-perfil-tarjeta.feature') { profileName: '#(scenarioData.cardProfile)' }
+    * def cardProfile = cardData.cardProfile
+    * def cardStatus = cardData.cardStatus
+    * def cardNumber = cardData.cardNumber
+    * def maskedCard = cardData.maskedCard
+    * def expirationDate = cardData.expirationDate
+    * def cvv = cardData.cvv
+    * match cardProfile == scenarioData.cardProfile
+    * match cardStatus == scenarioData.expectedCardStatus
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def publicKeyBase64 = rsa.response.dinBody.llavePublica
+    * def commonArgs = { publicKeyBase64: '#(publicKeyBase64)' }
+    * call read('classpath:features/consultar-tipos-credito.feature') commonArgs
+    * def calculationArgs = { publicKeyBase64: '#(publicKeyBase64)', transactionAmount: '#(scenarioData.transactionAmount)', installments: '#(scenarioData.installments)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
+    * call read('classpath:features/calcular-interes.feature') calculationArgs
+
   @negativo @e2e @cuotas-invalidas
   Scenario: Error de negocio por cuotas invalidas
     * def scenarioData = negativeScenarios['cuotas-invalidas']

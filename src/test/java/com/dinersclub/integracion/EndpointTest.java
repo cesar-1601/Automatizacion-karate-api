@@ -23,13 +23,18 @@ class EndpointTest {
             case "validar-otp" -> "features/validar-otp.feature";
             case "autorizar-consumo" -> "features/autorizar-consumo.feature";
             case "flujo-completo" -> "features/flujo-completo.feature";
+            case "escenarios-positivos-marcas" -> "features/escenarios-positivos-marcas.feature";
             case "escenarios-negativos" -> "features/escenarios-negativos.feature";
+            case "escenarios-negativos-tipos-credito" -> "features/escenarios-negativos-tipos-credito.feature";
+            case "escenarios-negativos-calculo-interes" -> "features/escenarios-negativos-calculo-interes.feature";
             case "escenarios-flujo" -> "features/escenarios-flujo.feature";
             default -> throw new IllegalArgumentException(
                 "Feature no permitido: " + feature
                     + ". Valores: consultar-llave-rsa-publica, consultar-tipos-credito, "
                     + "calcular-interes, generar-otp, validar-otp, autorizar-consumo, "
-                    + "flujo-completo, escenarios-negativos, escenarios-flujo"
+                    + "flujo-completo, escenarios-positivos-marcas, escenarios-negativos, "
+                    + "escenarios-negativos-tipos-credito, escenarios-negativos-calculo-interes, "
+                    + "escenarios-flujo"
             );
         };
 

@@ -66,6 +66,9 @@
                 <version>${maven.surefire.version}</version>
                 <configuration>
                     <useModulePath>false</useModulePath>
+                    <systemPropertyVariables>
+                        <suite>all</suite>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>

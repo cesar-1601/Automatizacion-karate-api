@@ -36,6 +36,78 @@
     "expectedResult": "business-error",
     "expectedBusinessCode": "0020"
   },
+  "monto-cero": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "transactionAmount": "0",
+    "installments": "1",
+    "expectedHttpStatus": 400
+  },
+  "monto-negativo": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "transactionAmount": "-500",
+    "installments": "1",
+    "expectedHttpStatus": 400
+  },
+  "monto-supera-longitud": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "transactionAmount": "100000000000",
+    "installments": "1",
+    "expectedHttpStatus": 400,
+    "expectedStage": "interest-calculation",
+    "expectedResult": "business-error",
+    "expectedBusinessCode": "0012"
+  },
+  "id-matriz-ausente": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "omitMatrixId": true,
+    "expectedHttpStatus": 400,
+    "expectedBusinessCode": "0005"
+  },
+  "id-matriz-longitud": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "matrixIdOverride": "12345",
+    "expectedHttpStatus": 400,
+    "expectedBusinessCode": "0014"
+  },
+  "grupo-credito-ausente": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "omitCreditGroup": true,
+    "expectedHttpStatus": 400,
+    "expectedBusinessCode": "0006"
+  },
+  "grupo-credito-invalido": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "creditGroupOverride": "Z",
+    "expectedHttpStatus": 400
+  },
+  "grupo-tipo-incompatible": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "creditGroupOverride": "C",
+    "creditTypeOverride": "02",
+    "expectedHttpStatus": 400
+  },
+  "tipo-credito-ausente": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "omitCreditType": true,
+    "expectedHttpStatus": 400,
+    "expectedBusinessCode": "0007"
+  },
+  "tipo-credito-longitud": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "creditTypeOverride": "0000",
+    "expectedHttpStatus": 400,
+    "expectedBusinessCode": "0016"
+  },
   "cuotas-invalidas": {
     "cardProfile": "diners-approved",
     "expectedCardStatus": "approved",
@@ -44,6 +116,35 @@
     "expectedHttpStatus": 400,
     "expectedStage": "interest-calculation",
     "expectedResult": "business-error"
+  },
+  "cuotas-negativas": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "transactionAmount": "500",
+    "installments": "-1",
+    "expectedHttpStatus": 400
+  },
+  "cuotas-superiores-maximo": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "creditGroupOverride": "P",
+    "creditTypeOverride": "02",
+    "installments": "51",
+    "expectedHttpStatus": 400
+  },
+  "tarjeta-sin-plan": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "creditGroupOverride": "X",
+    "creditTypeOverride": "03",
+    "expectedHttpStatus": 400
+  },
+  "comercio-matriz-incompatible": {
+    "cardProfile": "diners-approved",
+    "expectedCardStatus": "approved",
+    "merchantCodeOverride": "1545070",
+    "matrixIdOverride": "1",
+    "expectedHttpStatus": 400
   },
   "comercio-no-autorizado": {
     "cardProfile": "diners-approved",

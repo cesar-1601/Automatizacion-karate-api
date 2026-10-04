@@ -53,7 +53,8 @@ automatizacion-karate/
         │       ├── CryptoUtils.java
         │       ├── EndpointTest.java
         │       ├── FlujoAprobadoTest.java
-        │       └── EscenariosNegativosTest.java
+        │       ├── EscenariosNegativosTest.java
+        │       └── TodosLosFeaturesTest.java
         └── resources/
             └── features/
                 ├── base-request.js
@@ -65,7 +66,9 @@ automatizacion-karate/
                 ├── validar-otp.feature
                 ├── autorizar-consumo.feature
                 ├── flujo-completo.feature
+                ├── escenarios-positivos-marcas.feature
                 ├── escenarios-negativos.feature
+                ├── escenarios-negativos-tipos-credito.feature
                 └── escenarios-flujo.feature
             └── test-data/
                 └── negative-scenarios.json
@@ -296,12 +299,17 @@ Abrir en VS Code la carpeta:
 C:\Users\SOFK115221\Documents\automatizacion-karate
 ```
 
-Desde la terminal integrada, `mvn test` ejecuta los runners separados del flujo
-aprobado y de escenarios negativos:
+Desde la terminal integrada, `mvn test` ejecuta la suite general con los seis
+features definidos en `TodosLosFeaturesTest`:
 
 ```powershell
 mvn test -Dkarate.env=cal
 ```
+
+La suite general incluye `flujo-completo.feature`, `escenarios-negativos.feature`,
+`escenarios-negativos-tipos-credito.feature`,
+`escenarios-negativos-calculo-interes.feature`,
+`escenarios-positivos-marcas.feature` y `escenarios-flujo.feature`.
 
 Para ejecutar un feature especifico mediante `EndpointTest`, use la propiedad
 `feature`. En ese caso los runners separados se deshabilitan para evitar duplicar
@@ -314,8 +322,23 @@ mvn test -Dfeature=validar-otp -Dotp=000000
 mvn test -Dfeature=consultar-tipos-credito
 mvn test -Dfeature=calcular-interes
 mvn test -Dfeature=autorizar-consumo
+mvn test -Dfeature=escenarios-positivos-marcas
+mvn test -Dfeature=escenarios-negativos-tipos-credito
 mvn test -Dfeature=escenarios-flujo
 ```
+
+`escenarios-negativos-tipos-credito.feature` registra cuatro placeholders de
+validacion contractual: comercio ausente, comercio demasiado largo, tarjeta
+cifrada ausente y tarjeta enmascarada demasiado larga. Estan marcados
+`@pendiente` y solo imprimen la tarea; todavia no envian solicitudes. Para
+seleccionar uno al implementarlo, use `-Dfeature=escenarios-negativos-tipos-credito`
+y el tag correspondiente con `-Dkarate.options`.
+
+`escenarios-positivos-marcas.feature` contiene placeholders para Visa y Mastercard.
+Se pueden ejecutar sus placeholders con `-Dfeature=escenarios-positivos-marcas`; no
+envían solicitudes. Para filtrar uno por marca, use `-Dkarate.options="--tags @visa"`
+o `-Dkarate.options="--tags @mastercard"`. Se implementarán cuando CAL confirme los
+perfiles dummy, códigos de entidad/marca y comercios habilitados.
 
 Para ejecutar toda la suite de escenarios negativos:
 
@@ -333,10 +356,91 @@ mvn -Dtest=EscenariosNegativosTest "-Dkarate.options=--tags @TAG_DEL_ESCENARIO" 
 Por ejemplo, para ejecutar el rechazo funcional de tarjeta vencida, use el tag
 `@tarjeta-vencida`; ese caso selecciona `diners-expired` automáticamente.
 
-Tambien puede ejecutar cada suite de forma aislada:
+En `escenarios-negativos-calculo-interes.feature`, los casos de campo ausente y
+longitud (`@id-matriz-ausente`, `@id-matriz-longitud`, `@grupo-credito-ausente`,
+`@tipo-credito-ausente` y `@tipo-credito-longitud`) esperan HTTP 400. Sus códigos
+funcionales están definidos en `negative-scenarios.json`. Ejecute uno por tag:
 
 ```powershell
-mvn -Dtest=FlujoAprobadoTest test
+mvn "-Dfeature=escenarios-negativos-calculo-interes" "-Dkarate.options=--tags @TAG_DEL_ESCENARIO" test
+```
+
+El escenario `@grupo-tipo-incompatible` de
+`escenarios-negativos-calculo-interes.feature` envía el grupo `C` con el tipo `02`.
+El contrato documenta ambos valores por separado, pero no confirma que la
+combinación sea incompatible ni define su código funcional. El caso espera HTTP
+400 de forma provisional; confirme el status y el código con CAL cuando haya
+conectividad. Para ejecutarlo:
+
+```powershell
+mvn "-Dfeature=escenarios-negativos-calculo-interes" "-Dkarate.options=--tags @grupo-tipo-incompatible" test
+```
+
+El escenario `@cuotas-negativas` envía `cuotas = -1` al cálculo de interés.
+Espera HTTP 400 de forma provisional; confirme el status y el código funcional
+con CAL cuando haya conectividad. Para ejecutarlo:
+
+```powershell
+mvn "-Dfeature=escenarios-negativos-calculo-interes" "-Dkarate.options=--tags @cuotas-negativas" test
+```
+
+El escenario `@monto-cero` envía `montoTransaccion = 0` y una cuota. Espera HTTP
+400 de forma provisional; confirme el status y código funcional con CAL cuando
+haya conectividad. Para ejecutarlo:
+
+```powershell
+mvn "-Dfeature=escenarios-negativos-calculo-interes" "-Dkarate.options=--tags @monto-cero" test
+```
+
+El escenario `@monto-negativo` envía `montoTransaccion = -500` y una cuota.
+Espera HTTP 400 de forma provisional; confirme el status y el código funcional
+con CAL cuando haya conectividad. Para ejecutarlo:
+
+```powershell
+mvn "-Dfeature=escenarios-negativos-calculo-interes" "-Dkarate.options=--tags @monto-negativo" test
+```
+
+El escenario `@monto-longitud` envía un monto de 12 dígitos. El contrato indica
+el código funcional `0012`; confirme con CAL que el status HTTP esperado sea 400.
+Para ejecutarlo:
+
+```powershell
+mvn "-Dfeature=escenarios-negativos-calculo-interes" "-Dkarate.options=--tags @monto-longitud" test
+```
+
+El escenario `@cuotas-superiores-maximo` usa grupo `P`, tipo `02` y envía 51
+cuotas. El ejemplo de la especificación devuelve 50 para ese plan; confirme el
+máximo específico de la tarjeta con CAL y ajuste el valor si es distinto. La
+expectativa HTTP 400 también debe verificarse cuando haya conectividad:
+
+```powershell
+mvn "-Dfeature=escenarios-negativos-calculo-interes" "-Dkarate.options=--tags @cuotas-superiores-maximo" test
+```
+
+El escenario `@tarjeta-sin-plan` usa la tarjeta `diners-approved` con grupo `X`
+y tipo `03`, combinación no mostrada en el ejemplo del contrato (`C/00` y
+`P/02`). Confirme con CAL que ese plan no esté habilitado para la tarjeta y
+verifique el status HTTP/código funcional antes de considerar el caso validado.
+Para ejecutarlo:
+
+```powershell
+mvn "-Dfeature=escenarios-negativos-calculo-interes" "-Dkarate.options=--tags @tarjeta-sin-plan" test
+```
+
+El escenario `@comercio-matriz-incompatible` usa como candidata la pareja
+comercio `1545070` / matriz `1` y espera HTTP 400. La incompatibilidad de esa
+pareja y el código funcional deben confirmarse con CAL antes de considerar el
+caso validado. Para ejecutarlo:
+
+```powershell
+mvn "-Dfeature=escenarios-negativos-calculo-interes" "-Dkarate.options=--tags @comercio-matriz-incompatible" test
+```
+
+Los runners especializados pueden ejecutarse de forma aislada con `-Dsuite=solo`:
+
+```powershell
+mvn -Dsuite=solo -Dtest=FlujoAprobadoTest test
+mvn -Dsuite=solo -Dtest=EscenariosNegativosTest test
 ```
 
 Para ejecutar manualmente el flujo completo:
