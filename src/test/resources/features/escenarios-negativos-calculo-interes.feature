@@ -102,3 +102,11 @@ Feature: Escenarios negativos de calculo de interes
     * def scenarioData = negativeScenarios['comercio-matriz-incompatible']
     * def args = { merchantCodeOverride: '#(scenarioData.merchantCodeOverride)', matrixIdOverride: '#(scenarioData.matrixIdOverride)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
     * call read('classpath:features/calcular-interes.feature') args
+
+  # Casos pendientes de implementación para cálculo de interés
+  # Scenario: 9994 - Tarjeta no encontrada
+  # Scenario: 9995 - El AplicacionId es Requerido
+  # Scenario: 9996 - El CanalId es Requerido
+  # Scenario: 9997 - Error en el Descifrado de datos
+  # Scenario: 9998 - Error en el cifrado de datos
+  # Scenario: 9999 - Error en criptografía

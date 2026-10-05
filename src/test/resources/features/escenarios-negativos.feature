@@ -172,3 +172,21 @@ Feature: Escenarios negativos end-to-end
     * call read('classpath:features/validar-otp.feature') commonArgs
     * def authorizationArgs = { publicKeyBase64: '#(publicKeyBase64)', merchantCode: '#(scenarioData.merchant.merchantCode)', actividadComercial: '#(scenarioData.merchant.actividadComercial)', nombreEstablecimiento: '#(scenarioData.merchant.nombreEstablecimiento)' }
     * call read('classpath:features/autorizar-consumo.feature') authorizationArgs
+
+  # Casos futuros de validación de errores OTP (comentados para no alterar la ejecución actual)
+  # Scenario: 0001 - El valor del campo perfil es requerido
+  # Scenario: 0002 - La longitud del valor perfil es mayor a 1
+  # Scenario: 0003 - El valor del campo codigoTransaccion es requerido
+  # Scenario: 0004 - La longitud del valor codigoTransaccion es mayor a 3
+  # Scenario: 0005 - El valor del campo tarjetaEncriptada es requerido
+  # Scenario: 0006 - La longitud del valor codigoEntidad es mayor a 2
+  # Scenario: 0007 - La longitud del valor codigoMarca es mayor a 2
+  # Scenario: 0008 - El valor del campo tipoTarjeta es requerido
+  # Scenario: 0009 - La longitud del valor tipoTarjeta es mayor a 1
+  # Scenario: 9994 - Tarjeta no encontrada
+  # Scenario: 9995 - El AplicacionId es Requerido
+  # Scenario: 9996 - El CanalId es Requerido
+  # Scenario: 9997 - Error en el Descifrado de datos
+  # Scenario: 9998 - Error en el cifrado de datos
+  # Scenario: 9999 - Error en criptografía
+  # Scenario: 0010 - El campo perfil no cumple con la expresión requerida S o E
