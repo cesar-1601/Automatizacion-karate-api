@@ -16,7 +16,7 @@ Feature: Flujo completo Place To Pay
 
   @full-flow @destructive
   Scenario: Ejecutar el flujo CAL desde la llave hasta la autorizacion
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * match rsa.response.dinBody.llavePublica == '#string'
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def args = { publicKeyBase64: '#(publicKeyBase64)' }

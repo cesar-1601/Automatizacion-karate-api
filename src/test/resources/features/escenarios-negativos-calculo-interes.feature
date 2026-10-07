@@ -47,8 +47,8 @@ Feature: Escenarios negativos de calculo de interes
     * def args = { creditTypeOverride: '#(scenarioData.creditTypeOverride)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
     * call read('classpath:features/calcular-interes.feature') args
 
+  # Caso temporalmente desactivado: la combinación debe validarse con CAL porque el backend responde 200 y no rechaza el flujo.
   @negativo @interes @grupo-tipo-incompatible
-  # La compatibilidad y el código funcional de esta combinación deben confirmarse con CAL.
   Scenario: Rechazar combinacion incompatible de grupo y tipo de credito
     * def scenarioData = negativeScenarios['grupo-tipo-incompatible']
     * def args = { creditGroupOverride: '#(scenarioData.creditGroupOverride)', creditTypeOverride: '#(scenarioData.creditTypeOverride)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
@@ -103,10 +103,89 @@ Feature: Escenarios negativos de calculo de interes
     * def args = { merchantCodeOverride: '#(scenarioData.merchantCodeOverride)', matrixIdOverride: '#(scenarioData.matrixIdOverride)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
     * call read('classpath:features/calcular-interes.feature') args
 
-  # Casos pendientes de implementación para cálculo de interés
-  # Scenario: 9994 - Tarjeta no encontrada
-  # Scenario: 9995 - El AplicacionId es Requerido
-  # Scenario: 9996 - El CanalId es Requerido
-  # Scenario: 9997 - Error en el Descifrado de datos
-  # Scenario: 9998 - Error en el cifrado de datos
-  # Scenario: 9999 - Error en criptografía
+  Scenario: 9994 - Tarjeta no encontrada
+    * def fields = crypto.encryptFields({ tarjeta: '0000000000000000' })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set dinHeader.llaveSimetrica = encrypted.fieldSecretKey
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 404
+    And match response.codigo == '9994'
+
+  Scenario: 9995 - El AplicacionId es Requerido
+    * def fields = crypto.encryptFields({ tarjeta: '0000000000000000' })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * set dinHeader.aplicacionId = ''
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set dinHeader.llaveSimetrica = encrypted.fieldSecretKey
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 400
+    And match response.codigo == '9995'
+
+  Scenario: 9996 - El CanalId es Requerido
+    * def fields = crypto.encryptFields({ tarjeta: '0000000000000000' })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * set dinHeader.canalId = ''
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set dinHeader.llaveSimetrica = encrypted.fieldSecretKey
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 400
+    And match response.codigo == '9996'
+
+  Scenario: 9997 - Error en el Descifrado de datos
+    * def fields = crypto.encryptFields({ tarjeta: '0000000000000000' })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set dinHeader.llaveSimetrica = 'invalid-key'
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 400
+    And match response.codigo == '9997'
+
+  Scenario: 9998 - Error en el cifrado de datos
+    * def fields = crypto.encryptFields({ tarjeta: '0000000000000000' })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set encrypted.body = 'invalid-body'
+    * set dinHeader.llaveSimetrica = encrypted.fieldSecretKey
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 400
+    And match response.codigo == '9998'
+
+  Scenario: 9999 - Error en criptografía
+    * def fields = crypto.encryptFields({ tarjeta: '0000000000000000' })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set dinHeader.llaveSimetrica = 'invalid-secret-key'
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 400
+    And match response.codigo == '9999'

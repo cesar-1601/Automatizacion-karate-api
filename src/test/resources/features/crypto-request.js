@@ -2,7 +2,7 @@ function fn() {
   var CryptoUtils = Java.type('com.dinersclub.integracion.CryptoUtils');
   var requirePublicKey = function () {
     if (!publicKeyBase64) {
-      var rsaResult = karate.call('classpath:features/consultar-llave-rsa-publica.feature');
+      var rsaResult = karate.call('classpath:features/consultar-llave-rsa-publica.feature@llave-publica');
       if (rsaResult && rsaResult.response && rsaResult.response.dinBody && rsaResult.response.dinBody.llavePublica) {
         publicKeyBase64 = rsaResult.response.dinBody.llavePublica;
       } else {
