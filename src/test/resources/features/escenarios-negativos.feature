@@ -18,13 +18,13 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def args = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') args
     * call read('classpath:features/calcular-interes.feature') args
-    * call read('classpath:features/generar-otp.feature') args
-    * call read('classpath:features/validar-otp.feature') args
+    * call read('classpath:features/generar-otp.feature@otp') args
+    * call read('classpath:features/validar-otp.feature@otp') args
     * call read('classpath:features/autorizar-consumo.feature') args
 
   @negativo @e2e @cvv-invalido @destructive
@@ -42,13 +42,13 @@ Feature: Escenarios negativos end-to-end
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
     * def args = { cvv: '#(scenarioCvv)' }
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * set args.publicKeyBase64 = publicKeyBase64
     * call read('classpath:features/consultar-tipos-credito.feature') args
     * call read('classpath:features/calcular-interes.feature') args
-    * call read('classpath:features/generar-otp.feature') args
-    * call read('classpath:features/validar-otp.feature') args
+    * call read('classpath:features/generar-otp.feature@otp') args
+    * call read('classpath:features/validar-otp.feature@otp') args
     * call read('classpath:features/autorizar-consumo.feature') args
 
   @negativo @e2e @otp-invalido @stateful
@@ -63,14 +63,14 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def args = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') args
     * call read('classpath:features/calcular-interes.feature') args
-    * call read('classpath:features/generar-otp.feature') args
+    * call read('classpath:features/generar-otp.feature@otp') args
     * def validationArgs = { publicKeyBase64: '#(publicKeyBase64)', otp: '#(scenarioData.otpOverride)' }
-    * call read('classpath:features/validar-otp.feature') validationArgs
+    * call read('classpath:features/validar-otp.feature@otp') validationArgs
 
   @negativo @e2e @tarjeta-vencida @destructive
   Scenario: Rechazo funcional de tarjeta vencida
@@ -85,13 +85,13 @@ Feature: Escenarios negativos end-to-end
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
     * match expirationDate == scenarioData.expectedExpirationDate
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def args = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') args
     * call read('classpath:features/calcular-interes.feature') args
-    * call read('classpath:features/generar-otp.feature') args
-    * call read('classpath:features/validar-otp.feature') args
+    * call read('classpath:features/generar-otp.feature@otp') args
+    * call read('classpath:features/validar-otp.feature@otp') args
     * call read('classpath:features/autorizar-consumo.feature') args
 
   @negativo @e2e @monto-invalido
@@ -106,7 +106,7 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def commonArgs = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') commonArgs
@@ -125,7 +125,7 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def commonArgs = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') commonArgs
@@ -144,7 +144,7 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def commonArgs = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') commonArgs
@@ -163,12 +163,99 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def commonArgs = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') commonArgs
     * call read('classpath:features/calcular-interes.feature') commonArgs
-    * call read('classpath:features/generar-otp.feature') commonArgs
-    * call read('classpath:features/validar-otp.feature') commonArgs
+    * call read('classpath:features/generar-otp.feature@otp') commonArgs
+    * call read('classpath:features/validar-otp.feature@otp') commonArgs
     * def authorizationArgs = { publicKeyBase64: '#(publicKeyBase64)', merchantCode: '#(scenarioData.merchant.merchantCode)', actividadComercial: '#(scenarioData.merchant.actividadComercial)', nombreEstablecimiento: '#(scenarioData.merchant.nombreEstablecimiento)' }
     * call read('classpath:features/autorizar-consumo.feature') authorizationArgs
+
+  Scenario: 9994 - Tarjeta no encontrada
+    * def fields = crypto.encryptFields({ tarjeta: '0000000000000000' })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set dinHeader.llaveSimetrica = encrypted.fieldSecretKey
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 404
+    And match response.codigo == '9994'
+
+  Scenario: 9995 - El AplicacionId es Requerido
+    * def fields = crypto.encryptFields({ tarjeta: cardNumber })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * set dinHeader.aplicacionId = ''
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set dinHeader.llaveSimetrica = encrypted.fieldSecretKey
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 400
+    And match response.codigo == '9995'
+
+  Scenario: 9996 - El CanalId es Requerido
+    * def fields = crypto.encryptFields({ tarjeta: cardNumber })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * set dinHeader.canalId = ''
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set dinHeader.llaveSimetrica = encrypted.fieldSecretKey
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 400
+    And match response.codigo == '9996'
+
+  Scenario: 9997 - Error en el Descifrado de datos
+    * def fields = crypto.encryptFields({ tarjeta: cardNumber })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set dinHeader.llaveSimetrica = 'invalid-key'
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 400
+    And match response.codigo == '9997'
+
+  Scenario: 9998 - Error en el cifrado de datos
+    * def fields = crypto.encryptFields({ tarjeta: cardNumber })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set encrypted.body = 'invalid-body'
+    * set dinHeader.llaveSimetrica = encrypted.fieldSecretKey
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 400
+    And match response.codigo == '9998'
+
+  Scenario: 9999 - Error en criptografía
+    * def fields = crypto.encryptFields({ tarjeta: cardNumber })
+    * def sessionId = base.uuid()
+    * def dinHeader = base.header(sessionId)
+    * def values = fields.values
+    * def dinBody = { perfil: '#(profile)', usuarioBiometricoEncriptado: '', codigoTransaccion: '#(transactionCode)', tarjetaEncriptada: '#(values.tarjeta)', codigoEntidad: '', codigoMarca: '', tipoTarjeta: 'C', parametrosAdicionales: [] }
+    * def encrypted = crypto.encryptBody({ dinHeader: dinHeader, dinBody: dinBody }, fields.key)
+    * set dinHeader.llaveSimetrica = 'invalid-secret-key'
+    * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
+    Given request requestPayload
+    When method post
+    Then status 400
+    And match response.codigo == '9999'

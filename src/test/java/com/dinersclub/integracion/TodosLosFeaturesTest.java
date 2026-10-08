@@ -31,6 +31,11 @@ class TodosLosFeaturesTest {
     }
 
     @Karate.Test
+    Karate escenariosNegativosOtp() {
+        return Karate.run("classpath:features/negativos-otp.feature");
+    }
+
+    @Karate.Test
     Karate escenariosPositivosMarcas() {
         return Karate.run("classpath:features/escenarios-positivos-marcas.feature");
     }

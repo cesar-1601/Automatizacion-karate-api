@@ -28,6 +28,7 @@ Feature: Escenarios negativos de calculo de interes
 
   @negativo @interes @grupo-credito-invalido
   # El contrato acepta C, P o X. El código funcional para Z requiere confirmación con CAL.
+  #después de implementar, dio código 200, verificar si esto es el comportamiento esperado.
   Scenario: Rechazar grupo de credito no permitido
     * def scenarioData = negativeScenarios['grupo-credito-invalido']
     * def args = { creditGroupOverride: '#(scenarioData.creditGroupOverride)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
@@ -47,8 +48,9 @@ Feature: Escenarios negativos de calculo de interes
     * def args = { creditTypeOverride: '#(scenarioData.creditTypeOverride)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
     * call read('classpath:features/calcular-interes.feature') args
 
+  # Caso temporalmente desactivado: la combinación debe validarse con CAL porque el backend responde 200 y no rechaza el flujo.
+  # después de implementar, dio código 200, verificar si esto es el comportamiento esperado.
   @negativo @interes @grupo-tipo-incompatible
-  # La compatibilidad y el código funcional de esta combinación deben confirmarse con CAL.
   Scenario: Rechazar combinacion incompatible de grupo y tipo de credito
     * def scenarioData = negativeScenarios['grupo-tipo-incompatible']
     * def args = { creditGroupOverride: '#(scenarioData.creditGroupOverride)', creditTypeOverride: '#(scenarioData.creditTypeOverride)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
@@ -56,6 +58,7 @@ Feature: Escenarios negativos de calculo de interes
 
   @negativo @interes @cuotas-negativas
   # HTTP 400 es una expectativa provisional; confirmar el código funcional con CAL.
+  # después de implementar, dio código 200, verificar si esto es el comportamiento esperado.
   Scenario: Rechazar cuotas negativas
     * def scenarioData = negativeScenarios['cuotas-negativas']
     * def args = { installments: '#(scenarioData.installments)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
@@ -63,6 +66,7 @@ Feature: Escenarios negativos de calculo de interes
 
   @negativo @interes @cuotas-superiores-maximo
   # La especificación muestra P/02 con 50 cuotas; 51 es provisional y debe confirmarse con CAL para esta tarjeta.
+  # revisar a fondo el número de cuotas que se envía
   Scenario: Rechazar cuotas superiores al maximo permitido
     * def scenarioData = negativeScenarios['cuotas-superiores-maximo']
     * def args = { creditGroupOverride: '#(scenarioData.creditGroupOverride)', creditTypeOverride: '#(scenarioData.creditTypeOverride)', installments: '#(scenarioData.installments)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
@@ -70,6 +74,7 @@ Feature: Escenarios negativos de calculo de interes
 
   @negativo @interes @monto-cero
   # HTTP 400 es una expectativa provisional; confirmar el código funcional con CAL.
+  # revisar el monto de la transacción
   Scenario: Rechazar monto igual a cero
     * def scenarioData = negativeScenarios['monto-cero']
     * def args = { transactionAmount: '#(scenarioData.transactionAmount)', installments: '#(scenarioData.installments)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
@@ -91,6 +96,7 @@ Feature: Escenarios negativos de calculo de interes
 
   @negativo @interes @tarjeta-sin-plan
   # X/03 no aparece en el ejemplo documentado; confirmar que no esté habilitado para la tarjeta con CAL.
+  # después de implementar, dio código 200, verificar si esto es el comportamiento esperado.
   Scenario: Rechazar tarjeta sin plan de credito solicitado
     * def scenarioData = negativeScenarios['tarjeta-sin-plan']
     * def args = { creditGroupOverride: '#(scenarioData.creditGroupOverride)', creditTypeOverride: '#(scenarioData.creditTypeOverride)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
@@ -98,7 +104,9 @@ Feature: Escenarios negativos de calculo de interes
 
   @negativo @interes @comercio-matriz-incompatible
   # Pareja candidata 1545070/matriz 1; confirmar incompatibilidad y código con CAL.
+  # después de implementar, dio código 200, verificar si esto es el comportamiento esperado.
   Scenario: Rechazar comercio y matriz incompatibles
     * def scenarioData = negativeScenarios['comercio-matriz-incompatible']
     * def args = { merchantCodeOverride: '#(scenarioData.merchantCodeOverride)', matrixIdOverride: '#(scenarioData.matrixIdOverride)', expectedHttpStatus: '#(scenarioData.expectedHttpStatus)' }
     * call read('classpath:features/calcular-interes.feature') args
+

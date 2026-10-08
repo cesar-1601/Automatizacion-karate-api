@@ -156,5 +156,11 @@
     },
     "expectedStage": "authorization",
     "expectedResult": "functional-rejection"
+  },
+  "visa-rechazo": {
+    "cardProfile": "visa-declined",
+    "expectedCardStatus": "declined",
+    "expectedStage": "authorization",
+    "expectedResult": "functional-rejection"
   }
 }
