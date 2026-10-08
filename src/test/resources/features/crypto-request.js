@@ -19,13 +19,15 @@ function fn() {
     }
     return { values: encrypted, key: fieldKey };
   };
-  var encryptBody = function (body, fieldKey) {
+  var encryptBody = function (body, fieldKey, headerFieldKey, bodySecretKey) {
     requirePublicKey();
-    body.dinHeader.llaveSimetrica = CryptoUtils.encryptAesKeyWithRsa(fieldKey, publicKeyBase64);
+    var keyForHeader = headerFieldKey == null ? fieldKey : headerFieldKey;
+    body.dinHeader.llaveSimetrica = CryptoUtils.encryptAesKeyWithRsa(keyForHeader, publicKeyBase64);
     var bodyKey = CryptoUtils.generateAesKeyBase64();
+    var keyForSecret = typeof bodySecretKey === 'undefined' ? bodyKey : bodySecretKey;
     return {
       body: CryptoUtils.encryptGcm(JSON.stringify(body), bodyKey),
-      secretKey: CryptoUtils.encryptAesKeyWithRsa(bodyKey, publicKeyBase64),
+      secretKey: CryptoUtils.encryptAesKeyWithRsa(keyForSecret, publicKeyBase64),
       fieldSecretKey: CryptoUtils.encryptAesKeyWithRsa(fieldKey, publicKeyBase64)
     };
   };

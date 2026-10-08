@@ -22,8 +22,8 @@ Feature: Flujo completo Place To Pay
     * def args = { publicKeyBase64: '#(publicKeyBase64)' }
     * def tiposCredito = call read('classpath:features/consultar-tipos-credito.feature') args
     * def interes = call read('classpath:features/calcular-interes.feature') args
-    * def generarOtp = call read('classpath:features/generar-otp.feature') args
-    * def validarOtp = call read('classpath:features/validar-otp.feature') args
+    * def generarOtp = call read('classpath:features/generar-otp.feature@otp') args
+    * def validarOtp = call read('classpath:features/validar-otp.feature@otp') args
     * def autorizacion = call read('classpath:features/autorizar-consumo.feature') args
     * match tiposCredito.response.body == '#string'
     * match interes.response.body == '#string'

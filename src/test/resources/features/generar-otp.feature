@@ -11,6 +11,7 @@ Feature: Generar OTP
 
   @otp @encrypted
   Scenario: Generar OTP para la tarjeta dummy
+    * def expectedStatus = typeof expectedHttpStatus === 'undefined' ? 200 : expectedHttpStatus
     * def fields = crypto.encryptFields({ tarjeta: cardNumber })
     * def sessionId = base.uuid()
     * def dinHeader = base.header(sessionId)
@@ -21,7 +22,7 @@ Feature: Generar OTP
     * def requestPayload = { body: '#(encrypted.body)', secretKey: '#(encrypted.secretKey)' }
     Given request requestPayload
     When method post
-    Then status 200
+    * match responseStatus == expectedStatus
     And match response.body == '#string'
     And match response.secretKey == '#string'
 

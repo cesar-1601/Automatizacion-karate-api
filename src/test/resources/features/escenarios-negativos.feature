@@ -18,13 +18,13 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def args = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') args
     * call read('classpath:features/calcular-interes.feature') args
-    * call read('classpath:features/generar-otp.feature') args
-    * call read('classpath:features/validar-otp.feature') args
+    * call read('classpath:features/generar-otp.feature@otp') args
+    * call read('classpath:features/validar-otp.feature@otp') args
     * call read('classpath:features/autorizar-consumo.feature') args
 
   @negativo @e2e @cvv-invalido @destructive
@@ -42,13 +42,13 @@ Feature: Escenarios negativos end-to-end
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
     * def args = { cvv: '#(scenarioCvv)' }
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * set args.publicKeyBase64 = publicKeyBase64
     * call read('classpath:features/consultar-tipos-credito.feature') args
     * call read('classpath:features/calcular-interes.feature') args
-    * call read('classpath:features/generar-otp.feature') args
-    * call read('classpath:features/validar-otp.feature') args
+    * call read('classpath:features/generar-otp.feature@otp') args
+    * call read('classpath:features/validar-otp.feature@otp') args
     * call read('classpath:features/autorizar-consumo.feature') args
 
   @negativo @e2e @otp-invalido @stateful
@@ -63,14 +63,14 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def args = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') args
     * call read('classpath:features/calcular-interes.feature') args
-    * call read('classpath:features/generar-otp.feature') args
+    * call read('classpath:features/generar-otp.feature@otp') args
     * def validationArgs = { publicKeyBase64: '#(publicKeyBase64)', otp: '#(scenarioData.otpOverride)' }
-    * call read('classpath:features/validar-otp.feature') validationArgs
+    * call read('classpath:features/validar-otp.feature@otp') validationArgs
 
   @negativo @e2e @tarjeta-vencida @destructive
   Scenario: Rechazo funcional de tarjeta vencida
@@ -85,13 +85,13 @@ Feature: Escenarios negativos end-to-end
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
     * match expirationDate == scenarioData.expectedExpirationDate
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def args = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') args
     * call read('classpath:features/calcular-interes.feature') args
-    * call read('classpath:features/generar-otp.feature') args
-    * call read('classpath:features/validar-otp.feature') args
+    * call read('classpath:features/generar-otp.feature@otp') args
+    * call read('classpath:features/validar-otp.feature@otp') args
     * call read('classpath:features/autorizar-consumo.feature') args
 
   @negativo @e2e @monto-invalido
@@ -106,7 +106,7 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def commonArgs = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') commonArgs
@@ -125,7 +125,7 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def commonArgs = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') commonArgs
@@ -144,7 +144,7 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def commonArgs = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') commonArgs
@@ -163,13 +163,13 @@ Feature: Escenarios negativos end-to-end
     * def cvv = cardData.cvv
     * match cardProfile == scenarioData.cardProfile
     * match cardStatus == scenarioData.expectedCardStatus
-    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature')
+    * def rsa = call read('classpath:features/consultar-llave-rsa-publica.feature@llave-publica')
     * def publicKeyBase64 = rsa.response.dinBody.llavePublica
     * def commonArgs = { publicKeyBase64: '#(publicKeyBase64)' }
     * call read('classpath:features/consultar-tipos-credito.feature') commonArgs
     * call read('classpath:features/calcular-interes.feature') commonArgs
-    * call read('classpath:features/generar-otp.feature') commonArgs
-    * call read('classpath:features/validar-otp.feature') commonArgs
+    * call read('classpath:features/generar-otp.feature@otp') commonArgs
+    * call read('classpath:features/validar-otp.feature@otp') commonArgs
     * def authorizationArgs = { publicKeyBase64: '#(publicKeyBase64)', merchantCode: '#(scenarioData.merchant.merchantCode)', actividadComercial: '#(scenarioData.merchant.actividadComercial)', nombreEstablecimiento: '#(scenarioData.merchant.nombreEstablecimiento)' }
     * call read('classpath:features/autorizar-consumo.feature') authorizationArgs
 
